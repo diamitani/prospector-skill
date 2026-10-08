@@ -1,0 +1,18 @@
+id: signal-to-email-prospecting
+version: 0.1.0
+status: draft
+entrypoint: SKILL.md
+classification: skill-with-tool-adapters
+primary_job: research qualified business contacts from buying signals through email candidates
+routes: [research]
+owner: rostr-pal-skill-builder
+memory_namespace: "project/{project_id}"
+dependencies:
+  required: [harness_search_read, permitted_public_page_read, local_transform_and_export]
+  optional: [dns_lookup, approved_duckduckgo_search_adapter, approved_business_email_verifier]
+approval_gates: [VERIFY_DISCLOSURE, CONNECT_OR_DEPLOY]
+external_writes: denied_except_exactly_approved_verification
+outreach: denied
+crm_sync: separate_skill
+artifacts: [plan.json, leads.json, leads.csv, run-report.md]
+validation: scripts/validate_output.py

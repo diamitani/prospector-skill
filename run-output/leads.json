@@ -1,0 +1,224 @@
+{
+  "project_id": "test",
+  "pal": {
+    "protocol": "Parse \u2192 Ambiguity Scan \u2192 Latent Intent \u2192 Expand \u2192 Compile",
+    "mode": "synthetic_demo",
+    "parse": {
+      "brief": "test brief"
+    },
+    "ambiguity_scan": {
+      "defaults": [
+        "demo only"
+      ]
+    },
+    "latent_intent": {
+      "inferred": [
+        "professional prospect research"
+      ]
+    },
+    "expand": {
+      "signals": [
+        "hiring"
+      ]
+    },
+    "approval_sensitive_open_decisions": [],
+    "compiled_plan": {
+      "roles": [
+        "RevOps"
+      ],
+      "signals": [
+        {
+          "id": "hiring",
+          "queries": [
+            "demo hiring"
+          ]
+        }
+      ],
+      "signal_age_days": 90,
+      "spend_usd": 0,
+      "verification": {
+        "enabled": false
+      }
+    }
+  },
+  "sources": [
+    {
+      "id": "02af1cd6bae3e448",
+      "url": "https://example.com/demo",
+      "title": "Synthetic company evidence",
+      "excerpt": "Synthetic evidence. Fictional Example Co hires RevOps. Alex Rivera, Head of RevOps. No real company or person is asserted.",
+      "retrieved_at": "2026-10-07T13:10:10.384075+00:00",
+      "source_type": "permitted_page"
+    }
+  ],
+  "leads": [
+    {
+      "id": "6523e4a7d9bcd752",
+      "company": {
+        "name": "Fictional Example Co",
+        "domain": "example.com",
+        "icp_match": true,
+        "source_ids": [
+          "02af1cd6bae3e448"
+        ],
+        "signal": {
+          "status": "observed",
+          "event_date": "2026-10-07",
+          "relevance_confirmed": true,
+          "source_quality": "primary",
+          "source_ids": [
+            "02af1cd6bae3e448"
+          ]
+        }
+      },
+      "signal": {
+        "status": "observed",
+        "event_date": "2026-10-07",
+        "relevance_confirmed": true,
+        "source_quality": "primary",
+        "source_ids": [
+          "02af1cd6bae3e448"
+        ]
+      },
+      "contact": {
+        "name": "Alex Rivera",
+        "first_name": "Alex",
+        "last_name": "Rivera",
+        "name_parse_confirmed": true,
+        "title": "Head of RevOps",
+        "current_role_confirmed": true,
+        "role_match": true,
+        "source_ids": [
+          "02af1cd6bae3e448"
+        ],
+        "published_emails": [],
+        "patterns": []
+      },
+      "emails": [
+        {
+          "address": "alex.rivera@example.com",
+          "provenance": "guessed",
+          "ownership": "inferred",
+          "source_ids": [],
+          "dns": {
+            "status": "mx_present",
+            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+          },
+          "verification": {
+            "status": "not_checked",
+            "provider": null,
+            "checked_at": null,
+            "raw_status": null,
+            "approval_id": null
+          }
+        },
+        {
+          "address": "arivera@example.com",
+          "provenance": "guessed",
+          "ownership": "inferred",
+          "source_ids": [],
+          "dns": {
+            "status": "mx_present",
+            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+          },
+          "verification": {
+            "status": "not_checked",
+            "provider": null,
+            "checked_at": null,
+            "raw_status": null,
+            "approval_id": null
+          }
+        },
+        {
+          "address": "alex@example.com",
+          "provenance": "guessed",
+          "ownership": "inferred",
+          "source_ids": [],
+          "dns": {
+            "status": "mx_present",
+            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+          },
+          "verification": {
+            "status": "not_checked",
+            "provider": null,
+            "checked_at": null,
+            "raw_status": null,
+            "approval_id": null
+          }
+        }
+      ],
+      "suppressed": false,
+      "scoring": {
+        "total": 90,
+        "components": {
+          "icp_fit": 25,
+          "signal_relevance": 20,
+          "freshness": 15,
+          "role_fit": 20,
+          "source_quality": 10,
+          "email_evidence": 0
+        },
+        "qualified": true,
+        "tier": "A",
+        "disposition": "needs_review",
+        "not_probability": true
+      },
+      "disposition": "needs_review",
+      "blockers": [
+        "qualification_or_mailbox_evidence_incomplete"
+      ]
+    }
+  ],
+  "blockers": [
+    "suppression_screening_incomplete"
+  ],
+  "audit": [
+    {
+      "at": "2026-10-07T13:10:10.383878+00:00",
+      "stage": "search",
+      "query": "demo hiring",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384000+00:00",
+      "stage": "search",
+      "query": "\"Fictional Example Co\" \"RevOps\" leadership",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384011+00:00",
+      "stage": "search",
+      "query": "site:linkedin.com/in \"Fictional Example Co\" \"RevOps\"",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384021+00:00",
+      "stage": "search",
+      "query": "\"Alex Rivera\" \"Fictional Example Co\" email",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384056+00:00",
+      "stage": "search",
+      "query": "\"alex.rivera@example.com\"",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384068+00:00",
+      "stage": "search",
+      "query": "\"arivera@example.com\"",
+      "count": 1
+    },
+    {
+      "at": "2026-10-07T13:10:10.384077+00:00",
+      "stage": "search",
+      "query": "\"alex@example.com\"",
+      "count": 1
+    }
+  ],
+  "metrics": {
+    "queries": 7,
+    "verification_attempts": 0,
+    "elapsed_seconds": 0.0
+  }
+}

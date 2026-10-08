@@ -1,0 +1,18 @@
+{
+  "target": "/Users/patmini/Downloads/propsectorskill/prospector-core",
+  "verdict": "PASS",
+  "confidence": 1.0,
+  "reasons": [
+    "no findings"
+  ],
+  "generated_at": "2026-10-07 12:51 UTC",
+  "pal_model": "unavailable",
+  "counts": {
+    "total": 0,
+    "confirmed": 0,
+    "dismissed": 0,
+    "adjudicated": 0
+  },
+  "findings": [],
+  "fixes": []
+}

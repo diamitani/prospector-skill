@@ -1,0 +1,15 @@
+{
+  "project_id": "<project_id>",
+  "gate": "CRM_UPSERT",
+  "source_id": "<resolved_connector>",
+  "tool_name": "<actual_write_tool>",
+  "account": "<resolved_account>",
+  "operation": "create|update|no-op",
+  "object_type": "<actual_object>",
+  "existing_record_id": null,
+  "arguments": {},
+  "field_changes": [],
+  "suppression_checked": false,
+  "approval_id": null,
+  "write_receipt": null
+}

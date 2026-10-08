@@ -1,0 +1,50 @@
+{
+  "project_id": "<project_id>",
+  "intent": {
+    "offer": "<offer>",
+    "jtbd": "<business outcome>",
+    "icp": {
+      "industries": [],
+      "geography": [],
+      "hard_filters": []
+    },
+    "roles": [],
+    "requirements": {
+      "stated": [],
+      "inferred": [],
+      "optional": [],
+      "open": []
+    }
+  },
+  "pal": {
+    "protocol_ref": null,
+    "mode": "provisional_extract_enhance_execute"
+  },
+  "limits": {
+    "companies": 10,
+    "contacts_per_company": 2,
+    "search_queries": 60,
+    "signal_age_days": 90,
+    "email_candidates_per_contact": 3,
+    "verification_attempts": 20,
+    "spend_usd": 0,
+    "wall_clock_minutes": 30
+  },
+  "signals": [
+    {
+      "id": "s1",
+      "hypothesis": "<observable event>",
+      "relevance": "<why relevant>",
+      "queries": [],
+      "required_evidence": "<source and event date>",
+      "falsifier": "<what disqualifies>"
+    }
+  ],
+  "tool_mapping": {},
+  "suppression_screening": "incomplete",
+  "verification": {
+    "provider": null,
+    "remaining_free_quota": null,
+    "approval_gate": "VERIFY_DISCLOSURE"
+  }
+}

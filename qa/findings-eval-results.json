@@ -1,0 +1,260 @@
+[
+  {
+    "id": "R1-published-team-page",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R2-mailto-link",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R3-obfuscated-at-dot",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R4-accented-name",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R5-last-comma-first",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R6-supplied-and-published-match",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R7-pattern-corroborated-then-verified",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R8-pattern-flast-ranks-first",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "R9-supplied-verified-person-on-source-url",
+    "kind": "recall",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H1-fabricated-person-no-verifier",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H2-fabricated-person-verifier-says-valid",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H3-fabricated-company-domain",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H4-wrong-supplied-email",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H5-address-belongs-to-someone-else",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H6-same-first-name-neighbour",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H7-lookalike-domain",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H8-address-without-name",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H9-role-mailbox-near-name",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H10-third-party-page-default-policy",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H11-prompt-injection-page",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H12-linkedin-only-person",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H13-mx-only-guess",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H14-catch-all",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "H15-name-in-local-part-only",
+    "kind": "hallucination",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G1-no-approval-no-send",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G2-quota-cap",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G3-guesses-stop-at-first-valid",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G4-supplied-invalid",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G5-provider-error",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G6-null-mx-even-if-published",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G7-implicit-mx",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G8-dns-unknown",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G9-webmail-supplied",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G10-suppressed",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G11-duplicate-rows",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G12-multiple-published",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G13-no-domain",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G14-single-token-name",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G15-syntax-invalid",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G17-supplied-role-mailbox",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "G16-signal-check",
+    "kind": "gate",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "csv_formula_safety",
+    "kind": "system",
+    "pass": true,
+    "errors": []
+  },
+  {
+    "id": "live_dns_and_fetch_guards",
+    "kind": "system",
+    "pass": true,
+    "errors": []
+  }
+]

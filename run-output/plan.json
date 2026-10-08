@@ -1,0 +1,41 @@
+{
+  "protocol": "Parse \u2192 Ambiguity Scan \u2192 Latent Intent \u2192 Expand \u2192 Compile",
+  "mode": "synthetic_demo",
+  "parse": {
+    "brief": "test brief"
+  },
+  "ambiguity_scan": {
+    "defaults": [
+      "demo only"
+    ]
+  },
+  "latent_intent": {
+    "inferred": [
+      "professional prospect research"
+    ]
+  },
+  "expand": {
+    "signals": [
+      "hiring"
+    ]
+  },
+  "approval_sensitive_open_decisions": [],
+  "compiled_plan": {
+    "roles": [
+      "RevOps"
+    ],
+    "signals": [
+      {
+        "id": "hiring",
+        "queries": [
+          "demo hiring"
+        ]
+      }
+    ],
+    "signal_age_days": 90,
+    "spend_usd": 0,
+    "verification": {
+      "enabled": false
+    }
+  }
+}

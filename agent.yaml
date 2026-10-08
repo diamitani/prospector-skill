@@ -1,0 +1,11 @@
+id: pal-prospecting-agent
+version: 0.2.0
+status: draft
+model_role: harness_structured_research
+entrypoint: runtime.prospect
+skills: [skills/signal-to-email-prospecting/SKILL.md]
+tool_allowlist: [search_read, permitted_page_read, dns_read, local_export, exact_approved_mailbox_verification]
+composio_toolkits: []
+native_mcps: []
+approval_triggers: [VERIFY_DISCLOSURE, CONNECT_OR_DEPLOY]
+memory_namespace: "project/{project_id}"

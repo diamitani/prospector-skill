@@ -1,0 +1,53 @@
+{
+  "run_id": "<run_id>",
+  "sources": [],
+  "leads": [
+    {
+      "id": "<lead_id>",
+      "company": {
+        "name": null,
+        "domain": null,
+        "linkedin_url": null,
+        "icp_match": false,
+        "source_ids": []
+      },
+      "signal": {
+        "id": "s1",
+        "status": "hypothesis",
+        "event_date": null,
+        "source_ids": []
+      },
+      "contact": {
+        "name": null,
+        "title": null,
+        "profile_url": null,
+        "current_role_confirmed": false,
+        "role_rationale": null,
+        "source_ids": []
+      },
+      "emails": [
+        {
+          "address": "alex.rivera@example.com",
+          "provenance": "guessed",
+          "ownership": "inferred",
+          "source_ids": [],
+          "dns": {
+            "status": "unknown",
+            "checked_at": null
+          },
+          "verification": {
+            "status": "not_checked",
+            "provider": null,
+            "checked_at": null,
+            "raw_status": null,
+            "approval_id": null
+          }
+        }
+      ],
+      "disposition": "needs_review",
+      "blockers": [
+        "uncertain_identity"
+      ]
+    }
+  ]
+}

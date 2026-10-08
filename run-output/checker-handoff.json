@@ -1,0 +1,9 @@
+{
+  "url": "https://emails-checker.net/bulk-email-checker",
+  "mode": "manual_user_submission_only",
+  "captcha": "human_required",
+  "scope": "syntax_mx_only",
+  "upload_not_authorized_by_export": true,
+  "max_addresses_per_run": 5000,
+  "candidate_count": 3
+}

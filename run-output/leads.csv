@@ -1,0 +1,4 @@
+lead_id,company,contact,title,email,provenance,verification_status,score,tier,disposition
+6523e4a7d9bcd752,Fictional Example Co,Alex Rivera,Head of RevOps,alex.rivera@example.com,guessed,not_checked,90,A,needs_review
+6523e4a7d9bcd752,Fictional Example Co,Alex Rivera,Head of RevOps,arivera@example.com,guessed,not_checked,90,A,needs_review
+6523e4a7d9bcd752,Fictional Example Co,Alex Rivera,Head of RevOps,alex@example.com,guessed,not_checked,90,A,needs_review

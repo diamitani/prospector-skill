@@ -1,0 +1,13 @@
+id: signal-to-email-prospecting
+version: 0.2.0
+status: draft
+entrypoint: skills/signal-to-email-prospecting/SKILL.md
+runtime: runtime.prospect
+classification: agent-wrapper-plus-research-skill-plus-tool-adapters
+owner: rostr-pal-skill-builder
+routes: [research]
+memory_namespace: "project/{project_id}"
+approval_gates: [VERIFY_DISCLOSURE, CONNECT_OR_DEPLOY]
+external_writes: denied_except_exact_approved_mailbox_verification
+verification_prefilter: emails-checker-manual-syntax-mx
+outreach: denied

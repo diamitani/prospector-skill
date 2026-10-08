@@ -1,0 +1,30 @@
+rubric_version: 0.3.0
+score_type: review-priority-not-probability
+components:
+  confirmed_icp_fit: 25
+  targeting_relevance: 20
+  evidence_recency: 15
+  confirmed_contact_role_fit: 20
+  source_quality: 10
+  email_evidence: 10
+modes:
+  signal-driven:
+    targeting_relevance: observed relevant event; otherwise zero
+    evidence_recency: event <=30 days =15; inside configured window =8; stale/unknown/future =0
+    signal_hard_gate: true
+  icp-only:
+    targeting_relevance: independently sourced target business need/capability =20; declared ICP fit alone =0
+    evidence_recency: dated relevant evidence <=30 days =15; inside window =8; undated/stale/future =0
+    signal_hard_gate: false
+    buying_intent_claim: prohibited_without_explicit_evidence
+source_quality: primary =10; corroborated secondary =5; insufficient =0
+email_evidence: exact-address-valid =10; published-unverified =4; guessed-only =0
+tiers: {A: 85, B: 70, C: 0}
+ready_for_review_requires:
+  - resolved identity and domain
+  - confirmed ICP and current role with source evidence
+  - suppression screen complete and passed
+  - applicable targeting-mode gates passed
+  - score at least 70
+  - exact-address valid result; not accept-all
+contact_categories: [named-person, general-business-inbox, business-telephone]

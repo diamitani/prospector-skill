@@ -1,0 +1,16 @@
+id: signal-to-email-prospecting
+name: Prospector Skill
+version: 0.3.0
+status: draft
+entrypoint: SKILL.md
+owner: rostr-pal-skill-builder
+classification: reusable-research-skill-with-optional-tool-integrations
+routes: [research]
+discovery_routes: [corporate-title, local-business, mixed]
+targeting_modes: [signal-driven, icp-only]
+output_default: local-spreadsheet
+enrichment_subscription_required: false
+approval_gates: [VERIFY_DISCLOSURE, PLACES_COST, CRM_UPSERT, CONNECT_OR_DEPLOY]
+crm_write_default: denied_until_exact_approval
+outreach: denied
+memory_namespace: "project/{project_id}"
