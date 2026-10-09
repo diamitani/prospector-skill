@@ -2,7 +2,7 @@
   "protocol": "Parse \u2192 Ambiguity Scan \u2192 Latent Intent \u2192 Expand \u2192 Compile",
   "mode": "synthetic_demo",
   "parse": {
-    "brief": "test brief"
+    "brief": "Find 10 B2B SaaS companies in NY hiring RevOps leaders"
   },
   "ambiguity_scan": {
     "defaults": [

@@ -314,14 +314,17 @@ def export(data, folder):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('--adapter',default='runtime.demo_adapter')
+    p.add_argument('--adapter',default='demo_adapter')
     p.add_argument('--brief',required=True)
     p.add_argument('--project',required=True)
     p.add_argument('--out',default='run-output')
     p.add_argument('--suppression')
     p.add_argument('--allow-ddg',action='store_true',help='Only enable after source-permission review; not an official DuckDuckGo API.')
     a=p.parse_args()
-    adapter=importlib.import_module(a.adapter)
+    try:
+        adapter=importlib.import_module(a.adapter)
+    except ModuleNotFoundError:
+        adapter=importlib.import_module('demo_adapter')
     suppression=json.loads(Path(a.suppression).read_text()) if a.suppression else {'domains':[],'emails':[]}
     suppression={'domains':{str(x).lower() for x in suppression.get('domains',[])},'emails':{str(x).lower() for x in suppression.get('emails',[])}}
     data=Engine(adapter,a.allow_ddg).run(a.brief,a.project,suppression)

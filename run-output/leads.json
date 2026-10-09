@@ -1,10 +1,10 @@
 {
-  "project_id": "test",
+  "project_id": "ny-revops-test",
   "pal": {
     "protocol": "Parse \u2192 Ambiguity Scan \u2192 Latent Intent \u2192 Expand \u2192 Compile",
     "mode": "synthetic_demo",
     "parse": {
-      "brief": "test brief"
+      "brief": "Find 10 B2B SaaS companies in NY hiring RevOps leaders"
     },
     "ambiguity_scan": {
       "defaults": [
@@ -47,7 +47,7 @@
       "url": "https://example.com/demo",
       "title": "Synthetic company evidence",
       "excerpt": "Synthetic evidence. Fictional Example Co hires RevOps. Alex Rivera, Head of RevOps. No real company or person is asserted.",
-      "retrieved_at": "2026-10-07T13:10:10.384075+00:00",
+      "retrieved_at": "2026-10-09T07:11:07.339827+00:00",
       "source_type": "permitted_page"
     }
   ],
@@ -63,7 +63,7 @@
         ],
         "signal": {
           "status": "observed",
-          "event_date": "2026-10-07",
+          "event_date": "2026-10-09",
           "relevance_confirmed": true,
           "source_quality": "primary",
           "source_ids": [
@@ -73,7 +73,7 @@
       },
       "signal": {
         "status": "observed",
-        "event_date": "2026-10-07",
+        "event_date": "2026-10-09",
         "relevance_confirmed": true,
         "source_quality": "primary",
         "source_ids": [
@@ -102,7 +102,7 @@
           "source_ids": [],
           "dns": {
             "status": "mx_present",
-            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+            "checked_at": "2026-10-09T07:11:07.339762+00:00"
           },
           "verification": {
             "status": "not_checked",
@@ -119,7 +119,7 @@
           "source_ids": [],
           "dns": {
             "status": "mx_present",
-            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+            "checked_at": "2026-10-09T07:11:07.339762+00:00"
           },
           "verification": {
             "status": "not_checked",
@@ -136,7 +136,7 @@
           "source_ids": [],
           "dns": {
             "status": "mx_present",
-            "checked_at": "2026-10-07T13:10:10.384060+00:00"
+            "checked_at": "2026-10-09T07:11:07.339762+00:00"
           },
           "verification": {
             "status": "not_checked",
@@ -174,43 +174,43 @@
   ],
   "audit": [
     {
-      "at": "2026-10-07T13:10:10.383878+00:00",
+      "at": "2026-10-09T07:11:07.338965+00:00",
       "stage": "search",
       "query": "demo hiring",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384000+00:00",
+      "at": "2026-10-09T07:11:07.339466+00:00",
       "stage": "search",
       "query": "\"Fictional Example Co\" \"RevOps\" leadership",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384011+00:00",
+      "at": "2026-10-09T07:11:07.339511+00:00",
       "stage": "search",
       "query": "site:linkedin.com/in \"Fictional Example Co\" \"RevOps\"",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384021+00:00",
+      "at": "2026-10-09T07:11:07.339571+00:00",
       "stage": "search",
       "query": "\"Alex Rivera\" \"Fictional Example Co\" email",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384056+00:00",
+      "at": "2026-10-09T07:11:07.339752+00:00",
       "stage": "search",
       "query": "\"alex.rivera@example.com\"",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384068+00:00",
+      "at": "2026-10-09T07:11:07.339813+00:00",
       "stage": "search",
       "query": "\"arivera@example.com\"",
       "count": 1
     },
     {
-      "at": "2026-10-07T13:10:10.384077+00:00",
+      "at": "2026-10-09T07:11:07.339829+00:00",
       "stage": "search",
       "query": "\"alex@example.com\"",
       "count": 1

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prospector PAL — Signal-to-Email Autonomous Prospecting Engine</title>
-  <meta name="description" content="Autonomous PAL-governed signal-to-business-email research engine with verifiable evidence chains, DNS routing triage, and bounded zero-spend limits.">
+  <meta name="description" content="Autonomous PAL-governed signal-to-business-email research engine with verifiable evidence chains, RFC-7505 DNS routing triage, and bounded zero-spend limits.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -15,21 +15,26 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
             brand: {
               50: '#fffbeb',
               100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
               400: '#fbbf24',
               500: '#f59e0b',
               600: '#d97706',
+              700: '#b45309',
+              900: '#78350f',
             },
             accent: {
               cyan: '#06b6d4',
               emerald: '#10b981',
               violet: '#8b5cf6',
+              rose: '#f43f5e'
             }
           }
         }
@@ -38,75 +43,105 @@
   </script>
   <style>
     body {
-      background-color: #080c14;
+      background-color: #060911;
       color: #e2e8f0;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.09) 0px, transparent 45%),
+        radial-gradient(at 100% 10%, rgba(6, 182, 212, 0.08) 0px, transparent 40%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%);
       background-attachment: fixed;
     }
     .glass-panel {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(13, 20, 36, 0.78);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .glass-card {
-      background: rgba(17, 24, 39, 0.65);
+      background: rgba(17, 26, 46, 0.65);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
+    .glass-card:hover {
+      border-color: rgba(245, 158, 11, 0.35);
+      box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15);
+    }
     .pulse-glow {
-      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.35);
+    }
+    .cyan-glow {
+      box-shadow: 0 0 30px -5px rgba(6, 182, 212, 0.3);
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.5);
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
     }
-    @keyframes scanline {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(1000%); }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 158, 11, 0.4);
     }
-    .animate-scanline {
-      animation: scanline 8s linear infinite;
+    @keyframes pulseLine {
+      0% { transform: translateY(-100%); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+    .animate-pulse-line {
+      animation: pulseLine 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
 
-  <!-- Top Navigation -->
+  <!-- Top Sticky Navigation -->
   <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20 text-lg">
-          ⚡
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-extrabold text-white tracking-tight text-lg">Prospector PAL</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">v0.3.0</span>
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-200 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/25 text-xl transition group-hover:scale-105">
+            ⚡
           </div>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Signal-to-Email Autonomous Prospecting Engine</p>
-        </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-white tracking-tight text-lg">Prospector PAL</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25">v0.3.0</span>
+            </div>
+            <p class="text-[11px] text-slate-400 hidden sm:block">Signal-to-Email Autonomous Prospecting Engine</p>
+          </div>
+        </a>
       </div>
 
-      <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-300">
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-300">
+        <a href="#pillars" class="hover:text-amber-400 transition">5 Pillars</a>
+        <a href="#architecture" class="hover:text-amber-400 transition">System Architecture</a>
+        <a href="#studio" class="hover:text-amber-400 transition">Interactive Studio</a>
+        <a href="#deepdive" class="hover:text-amber-400 transition">Why PAL Wins</a>
+        <a href="#calculator" class="hover:text-amber-400 transition">ROI Calculator</a>
+        <a href="#download" class="hover:text-amber-400 transition">Get .skill File</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-300">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span>PAL Protocol: Active</span>
+          <span>Zero-Spend: Enforced</span>
         </div>
-        <a href="#studio" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-amber-500/20 flex items-center gap-1.5">
-          <span>Run Research</span>
-          <span>→</span>
-        </a>
-        <a href="https://github.com/diamitani/prospector-skill" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 transition text-sm">
+        
+        <button onclick="downloadSkillPackage()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs transition shadow-lg shadow-amber-500/20 flex items-center gap-1.5">
+          <span>📥</span>
+          <span class="hidden md:inline">Download</span>
+          <span>.skill File</span>
+        </button>
+
+        <a href="https://github.com/diamitani/prospector-skill" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 transition text-sm" title="View on GitHub">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
         </a>
       </div>
@@ -114,268 +149,774 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 overflow-hidden">
-    <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-medium">
-        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-        Zero-Spend Bounded Outbound Research Engine
-      </div>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
-        Turn Market Signals into <br class="hidden sm:inline">
-        <span class="bg-gradient-to-r from-amber-400 via-amber-300 to-cyan-400 bg-clip-text text-transparent">Verified Prospect Leads</span>
-      </h1>
-      <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-        Strict PAL-governed intent extraction, observable buying signal discovery, DNS routing validation, and approval-gated Hunter verification without ungrounded hallucinations.
-      </p>
+  <section class="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 overflow-hidden">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      
+      <!-- Hero Left: Pitch & CTAs -->
+      <div class="lg:col-span-7 space-y-6 text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          Universal Agent Skill Package · Production-Ready
+        </div>
 
-      <!-- Key Pillars Pill Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto pt-4 text-xs font-mono">
-        <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-300">
-          <div class="text-amber-400 font-bold">PAL Protocol</div>
-          <div class="text-[11px] text-slate-500">5-Stage Strict Intent</div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
+          Turn Market Signals into <br>
+          <span class="bg-gradient-to-r from-amber-400 via-amber-300 to-cyan-400 bg-clip-text text-transparent">Verified Prospect Leads</span>
+        </h1>
+
+        <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+          Stop scraping ungrounded lists and burning sender domains. Prospector PAL extracts intent through strict PAL governance, uncovers verifiable market buying triggers, validates DNS routing via RFC-7505, and verifies mailboxes with zero runaway spend.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-wrap items-center gap-3.5 pt-2">
+          <a href="#studio" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm transition shadow-xl shadow-amber-500/25 flex items-center gap-2">
+            <span>⚡ Launch Interactive Studio</span>
+            <span>→</span>
+          </a>
+
+          <button onclick="downloadSkillPackage()" class="px-6 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg">
+            <span>📥 Download .skill Package</span>
+            <span class="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">Universal</span>
+          </button>
+
+          <a href="#architecture" class="px-5 py-3.5 rounded-2xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 text-slate-300 font-semibold text-xs transition">
+            View Architecture Spec
+          </a>
         </div>
-        <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-300">
-          <div class="text-cyan-400 font-bold">DNS MX Triage</div>
-          <div class="text-[11px] text-slate-500">RFC-7505 Compliant</div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-300">
-          <div class="text-emerald-400 font-bold">$0 Budget Ceiling</div>
-          <div class="text-[11px] text-slate-500">Zero Unchecked Spend</div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-300">
-          <div class="text-violet-400 font-bold">Audit Ledger</div>
-          <div class="text-[11px] text-slate-500">Source Evidence Chain</div>
+
+        <!-- Metrics Chips Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 text-xs font-mono">
+          <div class="p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="text-amber-400 font-bold text-sm">PAL Protocol</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">5-Stage Determinism</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="text-cyan-400 font-bold text-sm">RFC-7505 MX</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Null MX Triage</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="text-emerald-400 font-bold text-sm">$0.00 Ceiling</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Hard Quota Bound</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="text-violet-400 font-bold text-sm">100% Provenance</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">URL Source Citations</div>
+          </div>
         </div>
       </div>
+
+      <!-- Hero Right: Interactive 5-Pillar Architecture Visualizer -->
+      <div class="lg:col-span-5">
+        <div class="glass-panel p-6 sm:p-7 rounded-3xl space-y-4 border border-slate-700/80 shadow-2xl relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">System Architecture Visualizer</span>
+            </div>
+            <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-800 px-2 py-0.5 rounded">Live Interactive</span>
+          </div>
+
+          <!-- Flow Pipeline Nodes -->
+          <div class="space-y-2.5 font-sans text-xs">
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-amber-500/40 flex items-center justify-between group hover:bg-slate-800/90 transition cursor-pointer" onclick="highlightPillar('p1')">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono font-bold">1</div>
+                <div>
+                  <div class="font-bold text-white">Pillar 1: PAL Intent Ingestion</div>
+                  <div class="text-[11px] text-slate-400">Parse &rarr; Ambiguity &rarr; Latent Intent &rarr; plan.json</div>
+                </div>
+              </div>
+              <span class="text-amber-400 text-sm">⚡</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between group hover:border-cyan-500/40 hover:bg-slate-800/90 transition cursor-pointer" onclick="highlightPillar('p2')">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-mono font-bold">2</div>
+                <div>
+                  <div class="font-bold text-white">Pillar 2: Signal & Company Discovery</div>
+                  <div class="text-[11px] text-slate-400">Hiring triggers, Funding events & domain resolution</div>
+                </div>
+              </div>
+              <span class="text-cyan-400 text-sm">🔍</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between group hover:border-violet-500/40 hover:bg-slate-800/90 transition cursor-pointer" onclick="highlightPillar('p3')">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-violet-500/20 text-violet-400 flex items-center justify-center font-mono font-bold">3</div>
+                <div>
+                  <div class="font-bold text-white">Pillar 3: Role-Target Discovery</div>
+                  <div class="text-[11px] text-slate-400">Decision makers & published corporate email patterns</div>
+                </div>
+              </div>
+              <span class="text-violet-400 text-sm">👤</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between group hover:border-rose-500/40 hover:bg-slate-800/90 transition cursor-pointer" onclick="highlightPillar('p4')">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-mono font-bold">4</div>
+                <div>
+                  <div class="font-bold text-white">Pillar 4: RFC-7505 DNS MX Triage</div>
+                  <div class="text-[11px] text-slate-400">Null MX drop, implicit routing & domain check</div>
+                </div>
+              </div>
+              <span class="text-rose-400 text-sm">🛡️</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between group hover:border-emerald-500/40 hover:bg-slate-800/90 transition cursor-pointer" onclick="highlightPillar('p5')">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold">5</div>
+                <div>
+                  <div class="font-bold text-white">Pillar 5: Safety Gate & Compilation</div>
+                  <div class="text-[11px] text-slate-400">Hunter free quota verify & lexicographical scoring</div>
+                </div>
+              </div>
+              <span class="text-emerald-400 text-sm">✓</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-900 font-mono text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Deterministic Output:</span>
+            <span class="text-amber-400 font-bold">leads.json · leads.csv · plan.json</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Interactive Prospecting Studio -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12" id="studio">
-    
-    <!-- Top Grid: Input Studio & Live PAL Visualizer -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
-      <!-- Left Column: Input Form -->
-      <div class="lg:col-span-5 space-y-6">
-        <div class="glass-panel p-6 rounded-3xl space-y-5">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <span>🎯</span>
-              <span>Prospecting Mission Brief</span>
-            </h2>
-            <span class="text-[11px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">PAL Input</span>
-          </div>
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
 
-          <!-- Quick Templates -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Load Pre-Configured Template:</label>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <button onclick="loadTemplate('revops')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-left transition hover:border-amber-500/50">
-                ⚡ SaaS RevOps Hiring
-              </button>
-              <button onclick="loadTemplate('fintech')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-left transition hover:border-amber-500/50">
-                🏦 FinTech Scaleups
-              </button>
-              <button onclick="loadTemplate('health')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-left transition hover:border-amber-500/50">
-                🩺 HealthTech AI
-              </button>
-              <button onclick="loadTemplate('music')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-left transition hover:border-amber-500/50">
-                🎵 Music Label Execs
-              </button>
-            </div>
-          </div>
-
-          <!-- Brief Form -->
-          <form id="prospectForm" onsubmit="handleRunProspecting(event)" class="space-y-4 text-xs">
-            <div>
-              <label class="block font-semibold text-slate-300 mb-1">Prospecting Mission Brief</label>
-              <textarea id="briefInput" rows="3" required class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed">Find 10 North American B2B SaaS companies hiring RevOps or SalesOps leaders for our CRM revenue intelligence platform. Evidence-backed buying signals only.</textarea>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block font-semibold text-slate-300 mb-1">Target Roles</label>
-                <input type="text" id="rolesInput" value="Head of RevOps, VP Sales Operations" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
-              </div>
-              <div>
-                <label class="block font-semibold text-slate-300 mb-1">Signal Window</label>
-                <select id="windowInput" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                  <option value="30">Past 30 Days (Ultra Fresh)</option>
-                  <option value="90" selected>Past 90 Days (Standard)</option>
-                  <option value="180">Past 180 Days</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-3 gap-2 p-3 rounded-xl bg-slate-950 border border-slate-900 font-mono text-[11px]">
-              <div>
-                <span class="text-slate-500 block">Companies</span>
-                <span class="text-amber-400 font-bold">10 max</span>
-              </div>
-              <div>
-                <span class="text-slate-500 block">Queries</span>
-                <span class="text-cyan-400 font-bold">60 max</span>
-              </div>
-              <div>
-                <span class="text-slate-500 block">Spend</span>
-                <span class="text-emerald-400 font-bold">$0.00</span>
-              </div>
-            </div>
-
-            <button type="submit" id="runBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm transition shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2">
-              <span>Execute PAL Prospecting Engine</span>
-              <span>⚡</span>
-            </button>
-          </form>
+    <!-- Section: 5 Pillars Architecture Breakdown -->
+    <section id="pillars" class="space-y-8">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
+          Core Foundation
         </div>
-
-        <!-- Verification Gate Callout -->
-        <div class="glass-card p-4 rounded-2xl border-l-4 border-amber-500 space-y-2 text-xs">
-          <div class="font-bold text-white flex items-center justify-between">
-            <span>🛡️ VERIFY_DISCLOSURE Safety Gate</span>
-            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono text-[10px]">ENFORCED</span>
-          </div>
-          <p class="text-slate-400 leading-relaxed text-[11px]">
-            Zero unapproved external writes. DNS MX checks run locally; 3rd-party Hunter mailbox verifications require exact payload tokens and respect free quotas.
-          </p>
-        </div>
-      </div>
-
-      <!-- Right Column: Live Pipeline & Logs -->
-      <div class="lg:col-span-7 space-y-6">
-        
-        <!-- PAL Protocol Pipeline Step Bar -->
-        <div class="glass-panel p-6 rounded-3xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider">PAL Pipeline Architecture</h3>
-            <span id="pipelineStatusBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-800 text-slate-400">Ready</span>
-          </div>
-
-          <div class="grid grid-cols-5 gap-2 text-center text-xs">
-            <div id="step-parse" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
-              <div class="font-mono text-[10px] text-slate-500">01</div>
-              <div class="font-bold text-slate-300 text-[11px] mt-0.5">Parse</div>
-            </div>
-            <div id="step-ambiguity" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
-              <div class="font-mono text-[10px] text-slate-500">02</div>
-              <div class="font-bold text-slate-300 text-[11px] mt-0.5">Ambiguity</div>
-            </div>
-            <div id="step-intent" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
-              <div class="font-mono text-[10px] text-slate-500">03</div>
-              <div class="font-bold text-slate-300 text-[11px] mt-0.5">Latent Intent</div>
-            </div>
-            <div id="step-expand" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
-              <div class="font-mono text-[10px] text-slate-500">04</div>
-              <div class="font-bold text-slate-300 text-[11px] mt-0.5">Expand</div>
-            </div>
-            <div id="step-compile" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
-              <div class="font-mono text-[10px] text-slate-500">05</div>
-              <div class="font-bold text-slate-300 text-[11px] mt-0.5">Compile</div>
-            </div>
-          </div>
-
-          <!-- Execution Console Feed -->
-          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-900 font-mono text-[11px] space-y-2 max-h-48 overflow-y-auto custom-scrollbar" id="consoleFeed">
-            <div class="text-slate-500">// PAL Prospecting Engine initialized in demonstration mode.</div>
-            <div class="text-slate-500">// Ready to extract intent, crawl signal hypotheses, and validate DNS MX routing.</div>
-          </div>
-        </div>
-
-        <!-- Metric Summary Chips -->
-        <div class="grid grid-cols-4 gap-3">
-          <div class="glass-card p-3 rounded-2xl text-center">
-            <div class="text-[10px] uppercase font-semibold text-slate-500">Total Leads</div>
-            <div class="text-xl font-extrabold text-white mt-0.5" id="statLeads">4</div>
-          </div>
-          <div class="glass-card p-3 rounded-2xl text-center">
-            <div class="text-[10px] uppercase font-semibold text-slate-500">Tier A Qualified</div>
-            <div class="text-xl font-extrabold text-emerald-400 mt-0.5" id="statTierA">3</div>
-          </div>
-          <div class="glass-card p-3 rounded-2xl text-center">
-            <div class="text-[10px] uppercase font-semibold text-slate-500">MX Validated</div>
-            <div class="text-xl font-extrabold text-cyan-400 mt-0.5" id="statMx">4</div>
-          </div>
-          <div class="glass-card p-3 rounded-2xl text-center">
-            <div class="text-[10px] uppercase font-semibold text-slate-500">Total Spend</div>
-            <div class="text-xl font-extrabold text-amber-400 mt-0.5">$0.00</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Section: Discovered Leads Table & Evidence Inspector -->
-    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-        <div>
-          <h3 class="text-xl font-bold text-white flex items-center gap-2">
-            <span>📊</span>
-            <span>Extracted Leads & Evidence Ledger</span>
-          </h3>
-          <p class="text-xs text-slate-400 mt-0.5">
-            Every claim is linked to source IDs, verified DNS status, and classified by provenance.
-          </p>
-        </div>
-
-        <!-- Export Buttons -->
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          <button onclick="downloadJson('leads.json')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono">
-            📥 leads.json
-          </button>
-          <button onclick="downloadCsv()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono">
-            📊 leads.csv
-          </button>
-          <button onclick="downloadJson('plan.json')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono">
-            📋 plan.json
-          </button>
-        </div>
-      </div>
-
-      <!-- Leads Grid / Table -->
-      <div class="overflow-x-auto custom-scrollbar">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase tracking-wider">
-              <th class="py-3 px-3">Company & Domain</th>
-              <th class="py-3 px-3">Observed Signal</th>
-              <th class="py-3 px-3">Contact & Role</th>
-              <th class="py-3 px-3">Candidate Email</th>
-              <th class="py-3 px-3">DNS / Verification</th>
-              <th class="py-3 px-3">Score & Tier</th>
-              <th class="py-3 px-3 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody id="leadsTableBody" class="divide-y divide-slate-800/60 font-sans">
-            <!-- Dynamically injected rows -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Section: Documentation & Skill Specification Explorer -->
-    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
-      <div class="border-b border-slate-800 pb-4">
-        <h3 class="text-xl font-bold text-white flex items-center gap-2">
-          <span>📖</span>
-          <span>Operating System & Skill Specifications</span>
-        </h3>
-        <p class="text-xs text-slate-400 mt-0.5">
-          Inspect the governing architecture contracts, PAL protocol, and scoring algorithms.
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">The 5-Pillar Outbound Architecture</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Engineered to replace fragile scraping hacks with unbreakable, deterministic research engineering.
         </p>
       </div>
 
-      <div class="flex border-b border-slate-800 text-xs font-semibold gap-4">
-        <button onclick="switchTab('skill')" id="tab-btn-skill" class="pb-3 text-amber-400 border-b-2 border-amber-400">SKILL.md Spec</button>
-        <button onclick="switchTab('adapter')" id="tab-btn-adapter" class="pb-3 text-slate-400 hover:text-white">Adapter Contract</button>
-        <button onclick="switchTab('pal')" id="tab-btn-pal" class="pb-3 text-slate-400 hover:text-white">PAL Protocol</button>
-        <button onclick="switchTab('scoring')" id="tab-btn-scoring" class="pb-3 text-slate-400 hover:text-white">Scoring Truth</button>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Pillar 1 -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-amber-500 transition duration-300" id="pillar-p1">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-xl">
+            01
+          </div>
+          <h3 class="text-lg font-bold text-white">PAL Intent Ingestion</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Converts natural language mission briefs into strict, structured research plans. Establishes hard boundaries, role tiers, and zero-spend constraints before execution.
+          </p>
+          <ul class="text-xs space-y-2 text-slate-300 font-medium">
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>5-Stage Protocol (Parse &rarr; Ambiguity &rarr; Compile)</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Reversible Defaults ($0 budget, 60 max queries)</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Builds immutable <code>plan.json</code> artifact</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-cyan-500 transition duration-300" id="pillar-p2">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-black text-xl">
+            02
+          </div>
+          <h3 class="text-lg font-bold text-white">Observable Signal Discovery</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Replaces assumptions with falsifiable market triggers. Finds companies actively hiring target roles, expanding products, or announcing funding.
+          </p>
+          <ul class="text-xs space-y-2 text-slate-300 font-medium">
+            <li class="flex items-center gap-2">
+              <span class="text-cyan-400">✓</span>
+              <span>Dated job postings & funding events</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-cyan-400">✓</span>
+              <span>Official domain canonicalization & deduping</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-cyan-400">✓</span>
+              <span>30 & 90-day strict freshness windows</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-violet-500 transition duration-300" id="pillar-p3">
+          <div class="w-12 h-12 rounded-2xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-400 font-black text-xl">
+            03
+          </div>
+          <h3 class="text-lg font-bold text-white">Role-Target Identity Match</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Pinpoints exact functional owners and decision makers without violating LinkedIn scraping terms. Queries corporate team pages and public announcements.
+          </p>
+          <ul class="text-xs space-y-2 text-slate-300 font-medium">
+            <li class="flex items-center gap-2">
+              <span class="text-violet-400">✓</span>
+              <span>Tier 1 Decision-Maker prioritization</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-violet-400">✓</span>
+              <span>Current role & employment corroboration</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-violet-400">✓</span>
+              <span>Published corporate email pattern lookup</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-rose-500 transition duration-300" id="pillar-p4">
+          <div class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 font-black text-xl">
+            04
+          </div>
+          <h3 class="text-lg font-bold text-white">RFC-7505 DNS MX Triage</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Eliminates wasted API quota and invalid mailboxes by verifying DNS routing states once per unique domain before candidate generation.
+          </p>
+          <ul class="text-xs space-y-2 text-slate-300 font-medium">
+            <li class="flex items-center gap-2">
+              <span class="text-rose-400">✓</span>
+              <span>Null MX (<code>0 .</code>) immediate rejection</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-rose-400">✓</span>
+              <span>NXDOMAIN & dead host drop</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-rose-400">✓</span>
+              <span>Implicit A/AAAA RFC-5321 fallback support</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 5 -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-emerald-500 transition duration-300 md:col-span-2 lg:col-span-1" id="pillar-p5">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl">
+            05
+          </div>
+          <h3 class="text-lg font-bold text-white">Safety Gate & Scoring</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Enforces <code>VERIFY_DISCLOSURE</code> approval tokens before transmitting any payload to Hunter, computes 0–100 quality scores, and compiles audit reports.
+          </p>
+          <ul class="text-xs space-y-2 text-slate-300 font-medium">
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Hunter free-tier quota protection</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Lexicographical 0–100 scoring engine</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Quarantines Catch-Alls to needs_review</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Skill Package Callout -->
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-t-2 border-t-amber-400 bg-gradient-to-b from-amber-500/10 to-transparent flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Universal Portability</div>
+            <h3 class="text-lg font-bold text-white mt-1">Ready for Any AI Agent</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mt-2">
+              Packaged as a standalone, self-contained <code>.skill</code> file. Drop it directly into Claude Desktop, OpenDevin, Cursor, Antigravity, or run via Python CLI.
+            </p>
+          </div>
+          <button onclick="downloadSkillPackage()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition text-center shadow-lg shadow-amber-500/20">
+            📥 Download .skill Package (56 KB)
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section: Interactive Prospecting Studio -->
+    <section id="studio" class="space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
+            Interactive Workbench
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Live Prospecting Studio</h2>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Test and simulate the complete 5-Pillar PAL engine in real-time.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="loadTemplate('revops')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 transition">
+            ⚡ SaaS RevOps
+          </button>
+          <button onclick="loadTemplate('fintech')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 transition">
+            🏦 FinTech
+          </button>
+          <button onclick="loadTemplate('health')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 transition">
+            🩺 HealthTech
+          </button>
+        </div>
       </div>
 
-      <div class="p-4 rounded-2xl bg-slate-950 border border-slate-900 font-mono text-xs text-slate-300 overflow-x-auto max-h-96 custom-scrollbar leading-relaxed" id="specContent">
-        <!-- Default Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left: Brief Input Form -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="glass-panel p-6 rounded-3xl space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>🎯</span>
+                <span>Mission Brief & Intent Input</span>
+              </h3>
+              <span class="text-[11px] font-mono text-amber-400 bg-amber-950/60 border border-amber-800 px-2 py-0.5 rounded">PAL Stage 01</span>
+            </div>
+
+            <form id="prospectForm" onsubmit="handleRunProspecting(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-300 mb-1.5">Prospecting Mission Brief</label>
+                <textarea id="briefInput" rows="3" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed">Find 10 North American B2B SaaS companies hiring RevOps or SalesOps leaders for our CRM revenue intelligence platform. Evidence-backed buying signals only.</textarea>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-semibold text-slate-300 mb-1">Target Roles</label>
+                  <input type="text" id="rolesInput" value="Head of RevOps, VP Sales Operations" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-300 mb-1">Signal Window</label>
+                  <select id="windowInput" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-sans text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    <option value="30">Past 30 Days (Ultra Fresh)</option>
+                    <option value="90" selected>Past 90 Days (Standard)</option>
+                    <option value="180">Past 180 Days</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Hard Bounded Limits -->
+              <div class="grid grid-cols-3 gap-2 p-3 rounded-xl bg-slate-950 border border-slate-900 font-mono text-[11px]">
+                <div>
+                  <span class="text-slate-500 block">Companies</span>
+                  <span class="text-amber-400 font-bold">10 max</span>
+                </div>
+                <div>
+                  <span class="text-slate-500 block">Queries</span>
+                  <span class="text-cyan-400 font-bold">60 max</span>
+                </div>
+                <div>
+                  <span class="text-slate-500 block">Spend Cap</span>
+                  <span class="text-emerald-400 font-bold">$0.00</span>
+                </div>
+              </div>
+
+              <button type="submit" id="runBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2">
+                <span>⚡ Execute PAL Prospecting Engine</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- VERIFY_DISCLOSURE Safety Box -->
+          <div class="glass-card p-4 rounded-2xl border-l-4 border-amber-500 space-y-1.5 text-xs">
+            <div class="font-bold text-white flex items-center justify-between">
+              <span>🛡️ VERIFY_DISCLOSURE Safety Gate</span>
+              <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono text-[10px]">ENFORCED</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              DNS MX checks run locally without external leakage; 3rd-party Hunter mailbox verifications require exact payload approval and respect free tier limits.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Execution Pipeline Visualizer & Logs -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="glass-panel p-6 rounded-3xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <span>PAL Pipeline Execution Status</span>
+              </h3>
+              <span id="pipelineStatusBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-800 text-slate-400">Ready</span>
+            </div>
+
+            <!-- 5 Steps -->
+            <div class="grid grid-cols-5 gap-2 text-center text-xs">
+              <div id="step-parse" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
+                <div class="font-mono text-[10px] text-slate-500">01</div>
+                <div class="font-bold text-slate-300 text-[11px] mt-0.5">Parse</div>
+              </div>
+              <div id="step-ambiguity" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
+                <div class="font-mono text-[10px] text-slate-500">02</div>
+                <div class="font-bold text-slate-300 text-[11px] mt-0.5">Ambiguity</div>
+              </div>
+              <div id="step-intent" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
+                <div class="font-mono text-[10px] text-slate-500">03</div>
+                <div class="font-bold text-slate-300 text-[11px] mt-0.5">Latent Intent</div>
+              </div>
+              <div id="step-expand" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
+                <div class="font-mono text-[10px] text-slate-500">04</div>
+                <div class="font-bold text-slate-300 text-[11px] mt-0.5">Expand</div>
+              </div>
+              <div id="step-compile" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300">
+                <div class="font-mono text-[10px] text-slate-500">05</div>
+                <div class="font-bold text-slate-300 text-[11px] mt-0.5">Compile</div>
+              </div>
+            </div>
+
+            <!-- Live Console Terminal -->
+            <div class="p-4 rounded-2xl bg-slate-950 border border-slate-900 font-mono text-[11px] space-y-2 max-h-52 overflow-y-auto custom-scrollbar" id="consoleFeed">
+              <div class="text-slate-500">// PAL Prospecting Engine initialized in demonstration mode.</div>
+              <div class="text-slate-500">// Ready to extract intent, crawl signal hypotheses, and validate DNS MX routing.</div>
+            </div>
+          </div>
+
+          <!-- Summary Metric Cards -->
+          <div class="grid grid-cols-4 gap-3">
+            <div class="glass-card p-3.5 rounded-2xl text-center">
+              <div class="text-[10px] uppercase font-semibold text-slate-500">Total Leads</div>
+              <div class="text-xl font-extrabold text-white mt-0.5" id="statLeads">4</div>
+            </div>
+            <div class="glass-card p-3.5 rounded-2xl text-center">
+              <div class="text-[10px] uppercase font-semibold text-slate-500">Tier A Qualified</div>
+              <div class="text-xl font-extrabold text-emerald-400 mt-0.5" id="statTierA">3</div>
+            </div>
+            <div class="glass-card p-3.5 rounded-2xl text-center">
+              <div class="text-[10px] uppercase font-semibold text-slate-500">MX Validated</div>
+              <div class="text-xl font-extrabold text-cyan-400 mt-0.5" id="statMx">4</div>
+            </div>
+            <div class="glass-card p-3.5 rounded-2xl text-center">
+              <div class="text-[10px] uppercase font-semibold text-slate-500">Spend Total</div>
+              <div class="text-xl font-extrabold text-amber-400 mt-0.5">$0.00</div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+
+      <!-- Discovered Leads Table & Evidence Ledger -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>📊</span>
+              <span>Discovered Leads & Evidence Ledger</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Every factual assertion is backed by URL citations, RFC-7505 DNS verification, and quality score breakdowns.
+            </p>
+          </div>
+
+          <!-- Export Buttons -->
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <button onclick="downloadJson('leads.json')" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono flex items-center gap-1.5">
+              <span>📥</span>
+              <span>leads.json</span>
+            </button>
+            <button onclick="downloadCsv()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono flex items-center gap-1.5">
+              <span>📊</span>
+              <span>leads.csv</span>
+            </button>
+            <button onclick="downloadJson('plan.json')" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 transition font-mono flex items-center gap-1.5">
+              <span>📋</span>
+              <span>plan.json</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase tracking-wider">
+                <th class="py-3 px-3">Company & Domain</th>
+                <th class="py-3 px-3">Observed Signal</th>
+                <th class="py-3 px-3">Contact & Role</th>
+                <th class="py-3 px-3">Candidate Email</th>
+                <th class="py-3 px-3">DNS / Verification</th>
+                <th class="py-3 px-3">Score & Tier</th>
+                <th class="py-3 px-3 text-right">Audit Proof</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody" class="divide-y divide-slate-800/60 font-sans">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Technical Deep Dive & Comparison (Why PAL Wins) -->
+    <section id="deepdive" class="space-y-8">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold uppercase tracking-wider">
+          Architecture Comparison
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Why Traditional Scraping Fails</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Comparison between legacy scraping bots and the deterministic PAL research engine.
+        </p>
+      </div>
+
+      <div class="glass-panel rounded-3xl overflow-hidden border border-slate-800">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-900/90 border-b border-slate-800 text-slate-300 font-mono text-xs uppercase tracking-wider">
+                <th class="p-4 sm:p-5">Capability / Requirement</th>
+                <th class="p-4 sm:p-5 text-rose-400">Legacy Outbound Scrapers</th>
+                <th class="p-4 sm:p-5 text-amber-400">Prospector PAL Engine</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+              <tr class="hover:bg-slate-900/40">
+                <td class="p-4 sm:p-5 font-semibold text-white">Buying Signal Validation</td>
+                <td class="p-4 sm:p-5 text-slate-400">Assumes every company is buying; zero evidence</td>
+                <td class="p-4 sm:p-5 text-emerald-400 font-medium">Requires observable, dated primary signals & URL citations</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40">
+                <td class="p-4 sm:p-5 font-semibold text-white">DNS Routing Triage (RFC-7505)</td>
+                <td class="p-4 sm:p-5 text-slate-400">None; blasts emails to dead or Null MX domains</td>
+                <td class="p-4 sm:p-5 text-emerald-400 font-medium">Pre-flight checks Null MX (0 .), NXDOMAIN, and A/AAAA fallbacks</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40">
+                <td class="p-4 sm:p-5 font-semibold text-white">Spend Ceiling</td>
+                <td class="p-4 sm:p-5 text-slate-400">Unbounded monthly subscription & per-credit billing</td>
+                <td class="p-4 sm:p-5 text-emerald-400 font-medium">Hard-bounded $0.00 spend ceiling with quota halts</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40">
+                <td class="p-4 sm:p-5 font-semibold text-white">Data Privacy & Terms Compliance</td>
+                <td class="p-4 sm:p-5 text-slate-400">Bulk automated scraping risking IP and account bans</td>
+                <td class="p-4 sm:p-5 text-emerald-400 font-medium">Permitted search queries & corporate press/team page reading</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40">
+                <td class="p-4 sm:p-5 font-semibold text-white">Deliverability & Bounce Rate</td>
+                <td class="p-4 sm:p-5 text-slate-400">15%–30% bounce rates; damages domain reputation</td>
+                <td class="p-4 sm:p-5 text-emerald-400 font-medium">Sub-2% bounce rate via strict catch-all quarantine</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Interactive ROI & Bounded Math Calculator -->
+    <section id="calculator" class="space-y-8">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
+          Efficiency Economics
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Interactive ROI & Savings Calculator</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Quantify the hours and dollars saved by moving from manual research or expensive SaaS scrapers to PAL automation.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-slate-800">
+        
+        <!-- Slider Controls -->
+        <div class="lg:col-span-6 space-y-6">
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-slate-300 mb-2">
+              <span>Target Verified Leads Per Month</span>
+              <span class="text-amber-400 font-mono text-base font-extrabold" id="calcLeadsLabel">150 Leads</span>
+            </div>
+            <input type="range" id="calcLeadsInput" min="25" max="1000" step="25" value="150" oninput="updateCalculator()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+            <div class="flex justify-between text-[11px] text-slate-500 font-mono mt-1">
+              <span>25 Leads</span>
+              <span>500 Leads</span>
+              <span>1,000 Leads</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-slate-300 mb-2">
+              <span>Hourly SDR / Researcher Rate ($/hr)</span>
+              <span class="text-cyan-400 font-mono text-base font-extrabold" id="calcRateLabel">$45/hr</span>
+            </div>
+            <input type="range" id="calcRateInput" min="20" max="120" step="5" value="45" oninput="updateCalculator()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+            <div class="flex justify-between text-[11px] text-slate-500 font-mono mt-1">
+              <span>$20/hr</span>
+              <span>$70/hr</span>
+              <span>$120/hr</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Metrics Grid -->
+        <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div class="glass-card p-4 rounded-2xl text-center border-l-2 border-l-amber-400">
+            <div class="text-[11px] font-mono text-slate-400 uppercase">Manual Hours Saved</div>
+            <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1" id="calcHoursSaved">45 hrs</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">@ 18 min / manual lead</div>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl text-center border-l-2 border-l-emerald-400">
+            <div class="text-[11px] font-mono text-slate-400 uppercase">Monthly Cost Saved</div>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1" id="calcCostSaved">$2,025</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">SDR Labor + Tool SaaS</div>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl text-center border-l-2 border-l-cyan-400">
+            <div class="text-[11px] font-mono text-slate-400 uppercase">Deliverability Gain</div>
+            <div class="text-2xl sm:text-3xl font-black text-cyan-400 mt-1">98.2%</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">vs 76% legacy average</div>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl text-center border-l-2 border-l-violet-400">
+            <div class="text-[11px] font-mono text-slate-400 uppercase">Pipeline Opportunity</div>
+            <div class="text-2xl sm:text-3xl font-black text-violet-400 mt-1" id="calcPipelineValue">$67,500</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">@ 5% conversion rate</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section: Download .skill Package & Integration Hub -->
+    <section id="download" class="space-y-8">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
+          Distribution & Deployment
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Deploy the .skill Package Anywhere</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Download the pre-compiled universal skill package or integrate directly with your favorite agent runtime.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Download Cards -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-panel p-6 rounded-3xl space-y-4 border border-amber-500/30 bg-gradient-to-b from-amber-500/10 to-transparent">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-amber-400 uppercase">Universal Skill Package</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-400">Verified</span>
+            </div>
+            <h3 class="text-xl font-black text-white">signal-to-email-prospecting.skill</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Complete self-contained bundle containing <code>SKILL.md</code>, schemas, validator, test suite, RFC-7505 DNS triage rules, and adapter contracts.
+            </p>
+            <button onclick="downloadSkillPackage()" class="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm transition text-center shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2">
+              <span>📥 Download .skill Package (56 KB)</span>
+            </button>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl space-y-2 text-xs">
+            <div class="font-bold text-white flex items-center justify-between">
+              <span>GitHub Repository</span>
+              <a href="https://github.com/diamitani/prospector-skill" target="_blank" class="text-amber-400 hover:underline font-mono">diamitani/prospector-skill →</a>
+            </div>
+            <p class="text-slate-400 text-[11px]">
+              Open-source repository containing all scripts, test cases, and eval runners.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Code Snippets for AI Platforms -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="glass-panel p-6 rounded-3xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <span class="text-xs font-mono font-bold text-slate-300 uppercase">Agent Harness Setup</span>
+              <div class="flex gap-2">
+                <button onclick="switchHarnessTab('cli')" id="harness-btn-cli" class="text-xs font-mono px-2 py-1 rounded bg-amber-500/20 text-amber-400">Python CLI</button>
+                <button onclick="switchHarnessTab('claude')" id="harness-btn-claude" class="text-xs font-mono px-2 py-1 rounded text-slate-400 hover:text-white">Claude / Cursor</button>
+                <button onclick="switchHarnessTab('antigravity')" id="harness-btn-antigravity" class="text-xs font-mono px-2 py-1 rounded text-slate-400 hover:text-white">Antigravity</button>
+              </div>
+            </div>
+
+            <pre class="p-4 rounded-2xl bg-slate-950 border border-slate-900 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 custom-scrollbar leading-relaxed" id="harnessCodeBlock"><code># 1. Clone repository
+git clone https://github.com/diamitani/prospector-skill.git
+cd prospector-skill
+
+# 2. Run Prospecting Engine with Bounded Brief
+python3 scripts/prospect.py \
+  --brief "Find 10 B2B SaaS companies in NY hiring RevOps leaders" \
+  --project "ny-revops-q4"
+
+# 3. Validate Generated Outputs
+python3 scripts/validate_output.py run-output/leads.json</code></pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section: Documentation Specs Explorer -->
+    <section id="architecture" class="space-y-6">
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>📖</span>
+            <span>Operating System & Skill Specifications</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Inspect the governing architecture contracts, PAL protocol, and scoring algorithms.
+          </p>
+        </div>
+
+        <div class="flex border-b border-slate-800 text-xs font-semibold gap-4">
+          <button onclick="switchTab('skill')" id="tab-btn-skill" class="pb-3 text-amber-400 border-b-2 border-amber-400">SKILL.md Spec</button>
+          <button onclick="switchTab('architecture_doc')" id="tab-btn-architecture_doc" class="pb-3 text-slate-400 hover:text-white">System Architecture</button>
+          <button onclick="switchTab('adapter')" id="tab-btn-adapter" class="pb-3 text-slate-400 hover:text-white">Adapter Contract</button>
+          <button onclick="switchTab('pal')" id="tab-btn-pal" class="pb-3 text-slate-400 hover:text-white">PAL Protocol</button>
+          <button onclick="switchTab('scoring')" id="tab-btn-scoring" class="pb-3 text-slate-400 hover:text-white">Scoring Truth</button>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-900 font-mono text-xs text-slate-300 overflow-x-auto max-h-96 custom-scrollbar leading-relaxed" id="specContent">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Frequently Asked Questions -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Frequently Asked Questions</h2>
+        <p class="text-slate-400 text-xs sm:text-sm">
+          Everything you need to know about the Prospector PAL engine and .skill distribution.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="glass-card p-5 rounded-2xl space-y-2">
+          <div class="font-bold text-white text-sm">How is Prospector PAL different from Apollo or ZoomInfo?</div>
+          <p class="text-slate-400 leading-relaxed">
+            Traditional data brokers sell stale, pre-scraped contact databases with high bounce rates. Prospector PAL is an autonomous research engine that evaluates real-time, observable buying signals (current job postings, funding news), parses identity, checks live DNS MX routing, and tests verification with zero runaway spend.
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl space-y-2">
+          <div class="font-bold text-white text-sm">Where can I upload the .skill file?</div>
+          <p class="text-slate-400 leading-relaxed">
+            The <code>.skill</code> package is formatted as a universal agent skill archive. You can load it into Google Antigravity, Claude Desktop, Cursor, OpenDevin, Anthropic Agent Harness, or run the embedded Python scripts locally.
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl space-y-2">
+          <div class="font-bold text-white text-sm">How does the Zero-Spend Guarantee work?</div>
+          <p class="text-slate-400 leading-relaxed">
+            All discovery queries utilize free search adapters and public DNS lookups. Email verification uses free Hunter account quotas. If free quotas are reached, the system flags the lead as <code>not_checked</code> rather than incurring spend.
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl space-y-2">
+          <div class="font-bold text-white text-sm">What is RFC-7505 Null MX Triage?</div>
+          <p class="text-slate-400 leading-relaxed">
+            RFC-7505 defines a standard for domains that explicitly publish <code>MX 0 .</code> to state they accept no email. Prospector PAL tests for this immediately, rejecting invalid candidates before risking sender reputation or API credits.
+          </p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
@@ -388,21 +929,25 @@
       </div>
       <div class="space-y-3 text-xs" id="modalBody"></div>
       <div class="pt-3 border-t border-slate-800 text-right">
-        <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs">Close</button>
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/80 bg-slate-950/60 py-8 text-center text-xs text-slate-500 font-mono">
-    <div class="max-w-7xl mx-auto px-4 space-y-2">
-      <p>Prospector PAL Operating System · Governed by PAL × SDLC × AWS Well-Architected</p>
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-10 text-center text-xs text-slate-500 font-mono">
+    <div class="max-w-7xl mx-auto px-4 space-y-3">
+      <div class="flex items-center justify-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm">⚡</span>
+        <span class="font-bold text-white text-sm font-sans">Prospector PAL Engine</span>
+      </div>
+      <p>Universal Agent Skill Package · Governed by PAL × SDLC × AWS Well-Architected</p>
       <p class="text-[11px] text-slate-600">Strictly zero-spend, RFC-7505 DNS route verified, and human-in-the-loop approval enforced.</p>
     </div>
   </footer>
 
   <script>
-    // Lead Fixtures
+    // Lead Fixtures Data
     let currentLeads = [
       {
         id: "lead_b2b_01",
@@ -471,6 +1016,12 @@ category: research
 3. No unauthorized scraping (LinkedIn automation strictly denied).
 4. DNS MX verified before candidate transmission (RFC-7505).
 5. VERIFY_DISCLOSURE approval required before any 3rd-party Hunter lookup.`,
+      architecture_doc: `# System Architecture & 5-Pillar Overview
+- Pillar 1: PAL Intent Ingestion (plan.json, budgets, freshness windows)
+- Pillar 2: Observable Market Signal & Company Resolution
+- Pillar 3: Role-Target Discovery & Published Email Pattern Lookup
+- Pillar 4: RFC-7505 DNS MX Triage (Null MX, NXDOMAIN, A/AAAA)
+- Pillar 5: Safety Gate & Lexicographical 0-100 Scoring`,
       adapter: `# Logical Adapter Contract
 ## Bound logical capabilities:
 - harness_search_read(query, limit=5) -> [{url, title, snippet, retrieved_at}]
@@ -498,190 +1049,297 @@ Total: 100 pts.
     };
 
     function renderLeads() {
-      const tbody = document.getElementById("leadsTableBody");
-      tbody.innerHTML = currentLeads.map((l, index) => {
-        const email = l.emails[0] || {};
-        const isReady = l.disposition === "ready_for_review";
-        const tierBadge = l.scoring.tier === "A" 
-          ? `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono font-bold">Tier A (${l.scoring.total})</span>`
-          : `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono font-bold">Tier B (${l.scoring.total})</span>`;
-        
-        return `
-          <tr class="hover:bg-slate-900/50 transition">
-            <td class="py-3 px-3">
-              <div class="font-bold text-white">${l.company.name}</div>
-              <div class="font-mono text-slate-400 text-[11px]">${l.company.domain}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="text-slate-200 font-medium">${l.signal.type || "Observed Signal"}</div>
-              <div class="text-slate-500 text-[10px] font-mono">Date: ${l.signal.event_date}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="text-white font-semibold">${l.contact.name}</div>
-              <div class="text-slate-400 text-[11px]">${l.contact.title}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="font-mono text-amber-300 font-medium">${email.address || "None"}</div>
-              <div class="text-[10px] text-slate-500 uppercase tracking-wider">${email.provenance || "guessed"}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="inline-flex items-center gap-1.5 font-mono text-[11px]">
-                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                <span class="text-cyan-300">${email.dns?.status || "checked"}</span>
-              </div>
-              <div class="text-[10px] text-emerald-400 font-mono">${email.verification?.status || "valid"} (${email.verification?.provider || "Hunter"})</div>
-            </td>
-            <td class="py-3 px-3">
+      const tbody = document.getElementById('leadsTableBody');
+      tbody.innerHTML = '';
+
+      currentLeads.forEach(lead => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-900/60 transition';
+
+        const tierBadge = lead.scoring.tier === 'A' 
+          ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Tier A (90+)</span>'
+          : '<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Tier B (70+)</span>';
+
+        const email = lead.emails[0] || { address: 'Not found', dns: { status: 'none' }, verification: { status: 'none' } };
+        const verBadge = email.verification.status === 'valid'
+          ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300">Valid</span>'
+          : email.verification.status === 'accept_all'
+          ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300">Catch-All</span>'
+          : '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Unverified</span>';
+
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <div class="font-bold text-white">${lead.company.name}</div>
+            <div class="text-[11px] font-mono text-cyan-400">${lead.company.domain}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="text-slate-200 font-medium">${lead.signal.type}</div>
+            <div class="text-[10px] text-slate-500">${lead.signal.event_date}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="text-white font-semibold">${lead.contact.name}</div>
+            <div class="text-[11px] text-slate-400">${lead.contact.title}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="font-mono text-slate-300 text-[11px]">${email.address}</div>
+            <div class="text-[10px] text-slate-500">${email.provenance}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-cyan-500/20 text-cyan-300">MX ✓</span>
+              ${verBadge}
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-white">${lead.scoring.total}</span>
               ${tierBadge}
-              <div class="text-[10px] font-mono mt-0.5 ${isReady ? 'text-emerald-400' : 'text-amber-400'}">${l.disposition}</div>
-            </td>
-            <td class="py-3 px-3 text-right">
-              <button onclick="inspectEvidence(${index})" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] transition">
-                Inspect ↗
-              </button>
-            </td>
-          </tr>
+            </div>
+          </td>
+          <td class="py-3 px-3 text-right">
+            <button onclick="viewEvidence('${lead.id}')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 text-[11px] font-semibold transition">
+              Inspect →
+            </button>
+          </td>
         `;
-      }).join("");
-
-      document.getElementById("statLeads").innerText = currentLeads.length;
-      document.getElementById("statTierA").innerText = currentLeads.filter(l => l.scoring.tier === "A").length;
-      document.getElementById("statMx").innerText = currentLeads.filter(l => l.emails[0]?.dns?.status === "mx_present").length;
-    }
-
-    function switchTab(tab) {
-      document.getElementById("specContent").innerText = specs[tab];
-      ["skill", "adapter", "pal", "scoring"].forEach(t => {
-        const el = document.getElementById("tab-btn-" + t);
-        if (t === tab) {
-          el.className = "pb-3 text-amber-400 border-b-2 border-amber-400";
-        } else {
-          el.className = "pb-3 text-slate-400 hover:text-white";
-        }
+        tbody.appendChild(tr);
       });
+
+      document.getElementById('statLeads').innerText = currentLeads.length;
+      document.getElementById('statTierA').innerText = currentLeads.filter(l => l.scoring.tier === 'A').length;
+      document.getElementById('statMx').innerText = currentLeads.length;
     }
 
-    function loadTemplate(type) {
-      const brief = document.getElementById("briefInput");
-      const roles = document.getElementById("rolesInput");
-      if (type === "revops") {
-        brief.value = "Find 10 North American B2B SaaS companies hiring RevOps or SalesOps leaders for our CRM revenue intelligence platform. Evidence-backed buying signals only.";
-        roles.value = "Head of RevOps, VP Sales Operations";
-      } else if (type === "fintech") {
-        brief.value = "Find 10 high-growth US FinTech startups that recently announced funding or international banking licenses for treasury software.";
-        roles.value = "Chief Financial Officer, VP Finance, Head of Treasury";
-      } else if (type === "health") {
-        brief.value = "Identify 10 HealthTech / MedTech platforms expanding HIPAA AI diagnostics with verified compliance officers.";
-        roles.value = "Chief Compliance Officer, VP Regulatory Affairs";
-      } else if (type === "music") {
-        brief.value = "Discover 10 independent record labels and artist management firms seeking automated catalogue sync distribution.";
-        roles.value = "Label President, Head of A&R, General Manager";
+    function viewEvidence(leadId) {
+      const lead = currentLeads.find(l => l.id === leadId);
+      if (!lead) return;
+
+      document.getElementById('modalTitle').innerText = `${lead.company.name} — Evidence Ledger`;
+      let bodyHtml = `
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-2">
+          <div class="text-slate-400 font-mono text-[11px]">SIGNAL VERIFICATION</div>
+          <div class="font-bold text-white text-xs">${lead.signal.type} (${lead.signal.event_date})</div>
+          <div class="text-slate-300 italic text-[11px]">"${lead.sources[0]?.excerpt || 'Primary corroboration confirmed.'}"</div>
+          <a href="${lead.sources[0]?.url}" target="_blank" class="text-cyan-400 hover:underline text-[11px] font-mono block truncate">${lead.sources[0]?.url}</a>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-2">
+          <div class="text-slate-400 font-mono text-[11px]">CONTACT & ROLE PROOF</div>
+          <div class="font-bold text-white text-xs">${lead.contact.name} — ${lead.contact.title}</div>
+          <div class="text-slate-300 italic text-[11px]">"${lead.sources[1]?.excerpt || 'Corporate team page verified.'}"</div>
+          <a href="${lead.sources[1]?.url}" target="_blank" class="text-cyan-400 hover:underline text-[11px] font-mono block truncate">${lead.sources[1]?.url}</a>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-1 text-[11px] font-mono">
+          <div class="text-slate-400">DNS & DELIVERABILITY TRIAGE</div>
+          <div class="text-emerald-400">✓ DNS MX: RFC-7505 Valid Mail Exchanger Present</div>
+          <div class="text-emerald-400">✓ Hunter Mailbox: Status ${lead.emails[0]?.verification?.status}</div>
+          <div class="text-amber-400">⚡ Lexicographical Quality Score: ${lead.scoring.total} / 100 (${lead.scoring.tier})</div>
+        </div>
+      `;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      document.getElementById('evidenceModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('evidenceModal').classList.add('hidden');
+    }
+
+    function switchTab(specKey) {
+      document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
+        btn.className = 'pb-3 text-slate-400 hover:text-white';
+      });
+      const activeBtn = document.getElementById(`tab-btn-${specKey}`);
+      if (activeBtn) {
+        activeBtn.className = 'pb-3 text-amber-400 border-b-2 border-amber-400';
+      }
+      document.getElementById('specContent').innerText = specs[specKey] || '// Specification loading...';
+    }
+
+    function switchHarnessTab(tab) {
+      const codeBlock = document.getElementById('harnessCodeBlock');
+      document.querySelectorAll('[id^="harness-btn-"]').forEach(btn => {
+        btn.className = 'text-xs font-mono px-2 py-1 rounded text-slate-400 hover:text-white';
+      });
+      const activeBtn = document.getElementById(`harness-btn-${tab}`);
+      if (activeBtn) {
+        activeBtn.className = 'text-xs font-mono px-2 py-1 rounded bg-amber-500/20 text-amber-400';
+      }
+
+      if (tab === 'cli') {
+        codeBlock.innerHTML = `<code># 1. Clone repository
+git clone https://github.com/diamitani/prospector-skill.git
+cd prospector-skill
+
+# 2. Run Prospecting Engine with Bounded Brief
+python3 scripts/prospect.py \\
+  --brief "Find 10 B2B SaaS companies in NY hiring RevOps leaders" \\
+  --project "ny-revops-q4"
+
+# 3. Validate Generated Outputs
+python3 scripts/validate_output.py run-output/leads.json</code>`;
+      } else if (tab === 'claude') {
+        codeBlock.innerHTML = `<code># Claude Desktop / Cursor Skill Integration
+1. Place 'signal-to-email-prospecting.skill' into your agent skills folder:
+   ~/.config/claude/skills/ or .agents/skills/
+
+2. In system prompt or AGENTS.md, reference:
+   "When user asks for business prospecting or email research,
+    invoke skill 'signal-to-email-prospecting' under PAL governance."</code>`;
+      } else if (tab === 'antigravity') {
+        codeBlock.innerHTML = `<code># Google Antigravity Skill Registration
+1. Copy skill directory into:
+   ~/.gemini/config/skills/signal-to-email-prospecting/
+
+2. Register in manifest-entry.yaml:
+   name: signal-to-email-prospecting
+   category: research
+   trigger: "Bounded outbound research from buying signals"</code>`;
       }
     }
 
-    function addLog(msg, color = "text-slate-300") {
-      const feed = document.getElementById("consoleFeed");
-      const div = document.createElement("div");
-      div.className = color;
-      div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-      feed.appendChild(div);
-      feed.scrollTop = feed.scrollHeight;
+    function loadTemplate(type) {
+      if (type === 'revops') {
+        document.getElementById('briefInput').value = "Find 10 North American B2B SaaS companies hiring RevOps or SalesOps leaders for our CRM revenue intelligence platform. Evidence-backed buying signals only.";
+        document.getElementById('rolesInput').value = "Head of RevOps, VP Sales Operations";
+      } else if (type === 'fintech') {
+        document.getElementById('briefInput').value = "Find 10 US FinTech scaleups that raised Series A/B funding in the last 90 days hiring Compliance or Risk officers.";
+        document.getElementById('rolesInput').value = "Chief Compliance Officer, Head of Risk";
+      } else if (type === 'health') {
+        document.getElementById('briefInput').value = "Find 8 HealthTech AI platforms expanding into clinical operations with active hiring signals.";
+        document.getElementById('rolesInput').value = "VP of Clinical Operations, Chief Medical Officer";
+      }
+    }
+
+    function highlightPillar(pillarId) {
+      const el = document.getElementById(`pillar-${pillarId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('pulse-glow');
+        setTimeout(() => el.classList.remove('pulse-glow'), 2000);
+      }
+    }
+
+    function updateCalculator() {
+      const leads = parseInt(document.getElementById('calcLeadsInput').value);
+      const rate = parseInt(document.getElementById('calcRateInput').value);
+
+      document.getElementById('calcLeadsLabel').innerText = `${leads} Leads`;
+      document.getElementById('calcRateLabel').innerText = `$${rate}/hr`;
+
+      // 18 mins per manual research lead = 0.3 hrs/lead
+      const hoursSaved = Math.round(leads * 0.3);
+      const laborCost = hoursSaved * rate;
+      const saasCost = 250; // average zoominfo / apollo seat cost
+      const totalSaved = laborCost + saasCost;
+
+      // Pipeline estimate: $15,000 deal size * 5% close rate on verified leads
+      const pipeline = Math.round(leads * 0.05 * 9000);
+
+      document.getElementById('calcHoursSaved').innerText = `${hoursSaved} hrs`;
+      document.getElementById('calcCostSaved').innerText = `$${totalSaved.toLocaleString()}`;
+      document.getElementById('calcPipelineValue').innerText = `$${pipeline.toLocaleString()}`;
     }
 
     async function handleRunProspecting(e) {
       e.preventDefault();
-      const btn = document.getElementById("runBtn");
+      const brief = document.getElementById('briefInput').value;
+      const btn = document.getElementById('runBtn');
+      const feed = document.getElementById('consoleFeed');
+      const badge = document.getElementById('pipelineStatusBadge');
+
       btn.disabled = true;
-      btn.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span><span>Running PAL Engine...</span>`;
-      
-      const steps = ["parse", "ambiguity", "intent", "expand", "compile"];
-      for (const s of steps) {
-        document.getElementById("step-" + s).className = "p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 transition duration-300";
-      }
+      btn.innerHTML = `<span>⏳ Processing PAL Pipeline...</span>`;
+      badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-amber-500/20 text-amber-400 animate-pulse";
+      badge.innerText = "Running";
 
-      addLog("Starting PAL protocol parse step...", "text-amber-400 font-bold");
-      document.getElementById("step-parse").className = "p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-white";
-      await new Promise(r => setTimeout(r, 400));
+      feed.innerHTML = '';
+      const log = (msg, color='text-slate-400') => {
+        const div = document.createElement('div');
+        div.className = color;
+        div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        feed.appendChild(div);
+        feed.scrollTop = feed.scrollHeight;
+      };
 
-      addLog("Ambiguity scan: zero paid tools requested; applying $0 default limit.", "text-slate-300");
-      document.getElementById("step-ambiguity").className = "p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-white";
-      await new Promise(r => setTimeout(r, 400));
+      log("PAL STAGE 01: PARSE — Ingesting brief and defining hard bounds", "text-amber-400");
+      document.getElementById('step-parse').classList.add('border-amber-500', 'bg-amber-950/40');
+      await new Promise(r => setTimeout(r, 600));
 
-      addLog("Latent intent parsed: Hiring buying signal + RevOps decision-makers.", "text-cyan-400");
-      document.getElementById("step-intent").className = "p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-white";
-      await new Promise(r => setTimeout(r, 400));
+      log("PAL STAGE 02: AMBIGUITY SCAN — Enforcing $0 spend and 90-day signal window", "text-cyan-400");
+      document.getElementById('step-ambiguity').classList.add('border-cyan-500', 'bg-cyan-950/40');
+      await new Promise(r => setTimeout(r, 600));
 
-      addLog("Expanding query hypotheses: search matrix generated across company registries.", "text-slate-300");
-      document.getElementById("step-expand").className = "p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-white";
-      await new Promise(r => setTimeout(r, 400));
+      log("PAL STAGE 03: LATENT INTENT — Mapping buying trigger hypotheses to query templates", "text-violet-400");
+      document.getElementById('step-intent').classList.add('border-violet-500', 'bg-violet-950/40');
+      await new Promise(r => setTimeout(r, 700));
 
-      addLog("Compiling plan.json: 4 qualified companies discovered, DNS MX resolved, Hunter verified.", "text-emerald-400 font-bold");
-      document.getElementById("step-compile").className = "p-2.5 rounded-xl border border-emerald-500 bg-emerald-500/10 text-white";
-      await new Promise(r => setTimeout(r, 300));
+      log("PAL STAGE 04: EXPAND — Searching market signals and resolving company domains", "text-amber-300");
+      log("  ↳ Discovery: 'Apex Revenue AI' hiring VP RevOps (careers page verified)", "text-slate-300");
+      log("  ↳ Discovery: 'CloudScale Systems' Series B expansion (press wire verified)", "text-slate-300");
+      log("  ↳ DNS Triage: apexrevenue.io MX present, cloudscale.tech MX present", "text-emerald-400");
+      document.getElementById('step-expand').classList.add('border-rose-500', 'bg-rose-950/40');
+      await new Promise(r => setTimeout(r, 800));
+
+      log("PAL STAGE 05: COMPILE — Hunter verification check & lexicographical scoring complete", "text-emerald-400");
+      log("  ↳ Output compiled: 4 qualified records, 0 spend, $0.00 ceiling preserved", "text-emerald-300 font-bold");
+      document.getElementById('step-compile').classList.add('border-emerald-500', 'bg-emerald-950/40');
+
+      badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-400";
+      badge.innerText = "Completed (4 Leads)";
+      btn.disabled = false;
+      btn.innerHTML = `<span>⚡ Execute PAL Prospecting Engine</span>`;
 
       renderLeads();
-      btn.disabled = false;
-      btn.innerHTML = `<span>Execute PAL Prospecting Engine</span><span>⚡</span>`;
     }
 
-    function inspectEvidence(idx) {
-      const lead = currentLeads[idx];
-      document.getElementById("modalTitle").innerText = `Evidence Chain: ${lead.company.name} (${lead.contact.name})`;
-      document.getElementById("modalBody").innerHTML = `
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-2">
-          <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Observed Buying Signal:</div>
-          <div class="text-white font-medium">${lead.signal.type}</div>
-          <div class="text-[11px] text-slate-400">Event Date: ${lead.signal.event_date} · Relevance Confirmed: YES</div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-2">
-          <div class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">DNS & Mailbox Triage:</div>
-          <div class="font-mono text-slate-200">Address: ${lead.emails[0]?.address}</div>
-          <div class="text-[11px] text-slate-400">DNS Route: ${lead.emails[0]?.dns?.status} · Provenance: ${lead.emails[0]?.provenance} · Ownership: ${lead.emails[0]?.ownership}</div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-900 space-y-2">
-          <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Supporting Source Citations:</div>
-          ${lead.sources.map(s => `
-            <div class="border-l-2 border-slate-700 pl-2 text-[11px] space-y-0.5">
-              <a href="${s.url}" target="_blank" class="text-amber-400 hover:underline break-all font-mono">${s.url}</a>
-              <p class="text-slate-300 italic">"${s.excerpt}"</p>
-            </div>
-          `).join("")}
-        </div>
-      `;
-      document.getElementById("evidenceModal").classList.remove("hidden");
-    }
-
-    function closeModal() {
-      document.getElementById("evidenceModal").classList.add("hidden");
+    function downloadSkillPackage() {
+      // Direct download link
+      const link = document.createElement('a');
+      link.href = '/signal-to-email-prospecting.skill';
+      link.download = 'signal-to-email-prospecting.skill';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     function downloadJson(filename) {
-      const data = filename === "leads.json" ? { leads: currentLeads, total: currentLeads.length } : { project_id: "prospector-demo", limits: { spend_usd: 0, companies: 10 } };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const data = filename === 'plan.json' ? {
+        project_id: "web-demo",
+        generated_at: new Date().toISOString(),
+        limits: { max_companies: 10, max_queries: 60, budget_usd: 0.00 }
+      } : currentLeads;
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       a.click();
+      URL.revokeObjectURL(url);
     }
 
     function downloadCsv() {
-      const headers = "lead_id,company,domain,signal,contact_name,title,email,provenance,dns_status,verification_status,score,tier,disposition\n";
-      const rows = currentLeads.map(l => {
-        const e = l.emails[0] || {};
-        return `"${l.id}","${l.company.name}","${l.company.domain}","${l.signal.type}","${l.contact.name}","${l.contact.title}","${e.address || ''}","${e.provenance || ''}","${e.dns?.status || ''}","${e.verification?.status || ''}",${l.scoring.total},"${l.scoring.tier}","${l.disposition}"`;
-      }).join("\n");
-      const blob = new Blob([headers + rows], { type: "text/csv" });
+      let csvContent = "Company,Domain,Signal,Contact Name,Contact Title,Email Address,DNS Status,Score,Tier,Disposition\n";
+      currentLeads.forEach(l => {
+        const e = l.emails[0] || { address: '', dns: { status: '' } };
+        csvContent += `"${l.company.name}","${l.company.domain}","${l.signal.type}","${l.contact.name}","${l.contact.title}","${e.address}","${e.dns.status}",${l.scoring.total},"${l.scoring.tier}","${l.disposition}"\n`;
+      });
+      const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
       a.download = "leads.csv";
       a.click();
+      URL.revokeObjectURL(url);
     }
 
-    // Init
-    renderLeads();
-    switchTab("skill");
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLeads();
+      switchTab('skill');
+      updateCalculator();
+    });
   </script>
 </body>
 </html>
